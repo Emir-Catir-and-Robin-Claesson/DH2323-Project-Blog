@@ -14,6 +14,31 @@
     </div>
     
     <div class="container post">
+        <h2> Dust from driving </h2>
+        <h3> May 14th - 2024</h3>
+        <p>
+            To make the effect of sand being kicked up into a dust cloud when driving on the dunes, we use particles. Most online material regarding smoke clouds focuses on a more cartoon-like aesthetic. We wanted a more realistic style, so we started by following <a href="https://johnstejskal.com/wp/how-to-create-realistic-smoke-in-unity/" target="_blank"> this tutorial </a>  to get a smoke-like effect. 
+        </p>
+        <p>
+            We took the results of this tutorial and started modifying it to represent a burst of dust instead. We changed the color of the particle material to a darker brown color to make it look like sand and changed the shape to a donut to get a more even distribution. We changed the emission from being a looped steady emission to a single burst of particles without looping. We also slightly altered the rotation, speed, and other factors set in the tutorial.  
+        </p>  
+        <p>
+            The plan was to instantiate a couple of these bursts of dust while driving, in the same manner that the explosion from the shell was instantiated on impact. We added code in the TankController script to create a dust particle at each wheel when movement input was detected. This worked okay for the main tank, so we added it to the enemy tanks as well. This is where problems arose. 
+        </p>   
+        <p>
+            We created these particle system objects for each frame, for each tank. Using particles this way, creating this many new particle effect game objects every frame made the framerate drop to unplayable levels. So it became clear we needed to change our approach. 
+        </p>
+        <p>
+
+            We went back to the particle system having a 1s-long looping duration, with a rate over time of 300 particles instead of a burst. We now added one of these particle systems to each wheel in the tank prefab. In the TankController script we now collected these particles in a list, and instead played or stopped the particle systems based on the tank was moving or not. We also added the particle systems to the enemy tanks, but since they are always moving, we let the particle system play on awake and never controlled it with any script. 
+        </p>
+            
+            <video width="60%" controls>
+            <source src="resources/Tank-dust.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+    </div>
+
+    <div class="container post">
         <h2> Updated specification</h2>
         <h3> May 9th - 2024</h3>
         Based on feedback from our initial project specification, we have decided to make smaller changes and larger clarifications to our project idea. As most of the tank was animated in the lab, we decided to lean into the particle and light effects.  
