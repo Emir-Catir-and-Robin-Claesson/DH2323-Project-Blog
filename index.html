@@ -8,32 +8,97 @@
 
 <body class="main">
     <div class="container head">
-            <h1>DH2323 Project Blog</h1>
-            <h2> Emir Catir & Robin Claesson</h2>
-            <p>This is the development blog for our project in DH2323 Computer Graphics and Interaction</p>
+        <h1>DH2323 Project Blog</h1>
+        <h2> Emir Catir & Robin Claesson</h2>
+        <p>This is the development blog for our project in DH2323 Computer Graphics and Interaction</p>
     </div>
-    
+
+    <div class="container post">
+        <h2> Smoke from main gun & Recoil </h2>
+        <h3> May 14th - 2024</h3>
+        <p>
+            The dust from driving was derived from a smoke effect, we thought it would be easy to make a copy of it and
+            modifying to create a burst of black smoke instead. The problem arose when we altered the color to black
+            instead of dark brown. We used an additive particle shader in unity, which we learned meant that black was
+            counted as nothing, meaning making the smoke black made it invisible.
+        </p>
+        <p>
+            The fix was to create a new material with a multiplicative shader instead of an additive, but now we also
+            had to find a new dust texture as the one from the first tutorial had a black background. We found <a
+                href="https://opengameart.org/content/smoke-aura" target="_blank"> this free asset </a>and used one of
+            its frames as the new texture, as it used a transparent background instead.
+        </p>
+        <p>
+            With our new material we could now produce black smoke, so we started modifying the particle system to
+            produce the burst of smoke from firing the shell instead of dust from driving. The emission was made to be a
+            burst of particles, and the shape was made to a narrow cylinder much like the barrel.
+        </p>
+        <p>
+            We wanted the particles to simulate gases rushing fast out of the barrel but being slowed down by the
+            surrounding air when exiting. This was achieved by using the Limit Velocity over Lifetime modifier. We set
+            the initial speed to 1 and added a dra factor of 5. This created smoke that was faster in the beginning, but
+            gradually slowed down to a halt in its short lifespan.
+        </p>
+        <p>
+            In difference to the sand dust particles, we did not want these particles to move with the tank, but stay
+            where they were emitted. There would also not be smoke created in every frame, so based on this we opted to
+            use the same method of instantiating that’s used in the lab to create the explosions. We added a reference
+            to this new smoke burst particle system to the ShellEmitter script and instantiated it at the same position
+            as the shell in the direction of the turret when the gun fired.
+        </p>
+        <p>
+            Lastly, we also wanted the force from firing the shell from the main gun to impact the tank, and to achieve
+            this we used Unity’s physics engine. We used GetComponentInParent to get the RigidBody of the tank and used
+            AddForce with the Impulse mode in the opposite direction of the fired shell. We used the same variable
+            m_CurrentLaunchForce which was used to launch the shell to get a varied recoil based on how long the mouse
+            button was held down, but scaled the force down to just give the tank a little nudge in the recoil
+            direction.
+        </p>
+
+        <video width="60%" controls>
+            <source src="resources/Gun-smoke.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+    </div>
+
     <div class="container post">
         <h2> Dust from driving </h2>
         <h3> May 14th - 2024</h3>
         <p>
-            To make the effect of sand being kicked up into a dust cloud when driving on the dunes, we use particles. Most online material regarding smoke clouds focuses on a more cartoon-like aesthetic. We wanted a more realistic style, so we started by following <a href="https://johnstejskal.com/wp/how-to-create-realistic-smoke-in-unity/" target="_blank"> this tutorial </a>  to get a smoke-like effect. 
+            To make the effect of sand being kicked up into a dust cloud when driving on the dunes, we use particles.
+            Most online material regarding smoke clouds focuses on a more cartoon-like aesthetic. We wanted a more
+            realistic style, so we started by following <a
+                href="https://johnstejskal.com/wp/how-to-create-realistic-smoke-in-unity/" target="_blank"> this
+                tutorial </a> to get a smoke-like effect.
         </p>
         <p>
-            We took the results of this tutorial and started modifying it to represent a burst of dust instead. We changed the color of the particle material to a darker brown color to make it look like sand and changed the shape to a donut to get a more even distribution. We changed the emission from being a looped steady emission to a single burst of particles without looping. We also slightly altered the rotation, speed, and other factors set in the tutorial.  
-        </p>  
+            We took the results of this tutorial and started modifying it to represent a burst of dust instead. We
+            changed the color of the particle material to a darker brown color to make it look like sand and changed the
+            shape to a donut to get a more even distribution. We changed the emission from being a looped steady
+            emission to a single burst of particles without looping. We also slightly altered the rotation, speed, and
+            other factors set in the tutorial.
+        </p>
         <p>
-            The plan was to instantiate a couple of these bursts of dust while driving, in the same manner that the explosion from the shell was instantiated on impact. We added code in the TankController script to create a dust particle at each wheel when movement input was detected. This worked okay for the main tank, so we added it to the enemy tanks as well. This is where problems arose. 
-        </p>   
+            The plan was to instantiate a couple of these bursts of dust while driving, in the same manner that the
+            explosion from the shell was instantiated on impact. We added code in the TankController script to create a
+            dust particle at each wheel when movement input was detected. This worked okay for the main tank, so we
+            added it to the enemy tanks as well. This is where problems arose.
+        </p>
         <p>
-            We created these particle system objects for each frame, for each tank. Using particles this way, creating this many new particle effect game objects every frame made the framerate drop to unplayable levels. So it became clear we needed to change our approach. 
+            We created these particle system objects for each frame, for each tank. Using particles this way, creating
+            this many new particle effect game objects every frame made the framerate drop to unplayable levels. So it
+            became clear we needed to change our approach.
         </p>
         <p>
 
-            We went back to the particle system having a 1s-long looping duration, with a rate over time of 300 particles instead of a burst. We now added one of these particle systems to each wheel in the tank prefab. In the TankController script we now collected these particles in a list, and instead played or stopped the particle systems based on the tank was moving or not. We also added the particle systems to the enemy tanks, but since they are always moving, we let the particle system play on awake and never controlled it with any script. 
+            We went back to the particle system having a 1s-long looping duration, with a rate over time of 300
+            particles instead of a burst. We now added one of these particle systems to each wheel in the tank prefab.
+            In the TankController script we now collected these particles in a list, and instead played or stopped the
+            particle systems based on the tank was moving or not. We also added the particle systems to the enemy tanks,
+            but since they are always moving, we let the particle system play on awake and never controlled it with any
+            script.
         </p>
-            
-            <video width="60%" controls>
+
+        <video width="60%" controls>
             <source src="resources/Tank-dust.mp4" type="video/mp4">
             Your browser does not support the video tag.
     </div>
@@ -41,23 +106,29 @@
     <div class="container post">
         <h2> Updated specification</h2>
         <h3> May 9th - 2024</h3>
-        Based on feedback from our initial project specification, we have decided to make smaller changes and larger clarifications to our project idea. As most of the tank was animated in the lab, we decided to lean into the particle and light effects.  
+        Based on feedback from our initial project specification, we have decided to make smaller changes and larger
+        clarifications to our project idea. As most of the tank was animated in the lab, we decided to lean into the
+        particle and light effects.
 
-        This was written down with a background, problem statement, and thoughts on how we would implement these changes into a document. This document can be viewed <a href="https://github.com/Emir-Catir-and-Robin-Claesson/DH2323-Project-Blog/blob/main/resources/DH2323_Project_Specification.pdf" target="_blank">here</a>. 
+        This was written down with a background, problem statement, and thoughts on how we would implement these changes
+        into a document. This document can be viewed <a
+            href="https://github.com/Emir-Catir-and-Robin-Claesson/DH2323-Project-Blog/blob/main/resources/DH2323_Project_Specification.pdf"
+            target="_blank">here</a>.
     </div>
 
     <div class="container post">
         <h2> Intial project idea and specification</h2>
         <h3> April 30 - 2024</h3>
-        Our idea for the project was to extend the work we did in animation track lab 3, to make the entire scene more dynamic. 
+        Our idea for the project was to extend the work we did in animation track lab 3, to make the entire scene more
+        dynamic.
         As our initial project specification, we decided to include:
         <ul>
             <li> Animations for the tank </li>
             <li>Dust particle effects from driving on the sand </li>
             <li>“Tire marks” in the sand from driving on it</li>
             <li>Particle effects on firing the laser</li>
-            <li>Light effects from explosions and weapons </li>  
-        </ul> 
+            <li>Light effects from explosions and weapons </li>
+        </ul>
 
         Below is an initial sketch of our project idea:
         <br>
