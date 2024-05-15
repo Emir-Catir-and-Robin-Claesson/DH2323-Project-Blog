@@ -14,6 +14,61 @@
     </div>
 
     <div class="container post">
+        <h2> Improved explosion with lighting</h2>
+        <h3> May 15th - 2024</h3>
+
+        <p>
+            One of our set out improvements was to make the explosions also emit light into the world. We also now felt
+            it was a good opportunity to use what we learned from the smoke and dust additions to improve our explosion
+            from what we submitted in lab 3. We wanted to create a fiery explosion which also lit up its surroundings.
+            This may not be how many explosions from tanks look, but it is how they are often presented in movies and it
+            also presented us with a good opportunity to investigate lighting effects with particles.
+        </p>
+
+        <h4>Improved Explosion</h4>
+        <p>
+            So the first step was to improve our explosions. We found <a
+                href="https://www.youtube.com/watch?v=cvQiQglPI18" target="_blank">this tutorial</a>, which used a
+            component in
+            the particle systems we had not used yet, Texture Sheet Animation. Instead of using a material with a
+            texture to display, we now use a material with the texture sheet below. This texture sheet contains several
+            textures which when played in order animates a small explosion. With the Texture Sheet Animation component
+            we could now set the system to step through the frames in the sheets during each particle's lifetime.
+
+        </p>
+
+        <img src="resources/Explosion.png" width="30%" alt="Explosion texture">
+
+        <p>
+            Upon this animation we now applied a lot of the concepts we used in the previous particle systems in the
+            project to create the desired effect. We changed the emission to be a series of 5 quick bursts
+            particles from a half sphere shape. We used color over lifetime to make the particles change color and fade
+            out over time, etc.
+        </p>
+
+        <h4>Lighting</h4>
+        <p>
+            Now to make the explosion emit light. Instead of making each particle in the explosion emit light we decided
+            to create a new particle effect as a child from the explosion. This new particle system was set to only emit
+            a single stationary particle from an edge at the start of the explosion. We then created a default point
+            light in the game world and saved it as a prefab before deleting it from the scene.
+        </p>
+        <p>
+            We then activated the Lights component in the particle system and selected our point light as the light
+            source. We set the ratio of the Light component to 1, unchecked Random Distribution and Size Affects Range
+            to get a predictable and guaranteed light from our single particle. We used the Use Particle Color on the
+            lights component with a color over lifetime that went from a light color to fully faded to get a dismissing
+            light instead of just a light that cut off when the particle despawned.
+
+        </p>
+
+        <video width="60%" controls>
+            <source src="resources/Improved-explosion.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+
+    </div>
+
+    <div class="container post">
         <h2> Smoke from main gun & Recoil </h2>
         <h3> May 14th - 2024</h3>
         <p>
