@@ -14,6 +14,42 @@
     </div>
 
     <div class="container post">
+        <h2> New laser with light bloom</h2>
+        <h3> May 17th - 2024</h3>
+
+        <p>
+            We started by creating a new material for the laser, a pure red-colored material with emission checked, and
+            the same color selected for it. This material was then applied to a thin cylinder which was saved as a
+            prefab without any Collider component.
+        </p>
+
+        <p>
+
+            We added a reference to this prefab in the SecondaryGunShoot script. We modified the Shoot function to no
+            longer set the positions for the LineRender, but instead create an instance of the laser cylinder in between
+            the tank and where the laser hit.
+        </p>
+
+        <p>
+            We initially started by investigating using the <a
+                href="https://docs.unity3d.com/Packages/com.unity.postprocessing@3.4/manual/index.html"
+                target="_blank">Post Processing Stack v2</a> package for Unity to create the light bloom effect. We did
+            get a working result, but we then found that this was incompatible with the <a
+                href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/manual/index.html"
+                target="_blank">URP</a>, which we where using to create the tire tracks.
+        </p>
+        <p>
+            To give the laser from the secondary weapon the effect of emitting light, we instead made use of the URP's
+            built-in post-processing. This was done by creating a Global Volume in the scene and ad a Bloom effect. We
+            could then change the intensity of the emission in the laser material and the intensity of the bloom effect
+            to create an effect of visible light emitted from the laser which can be seen in Figure.
+        </p>
+
+        <img src="resources/Laser.png" width="60%" alt="Laser with bloom effect.">
+    </div>
+
+
+    <div class="container post">
         <h2> Improved explosion with lighting</h2>
         <h3> May 15th - 2024</h3>
 
@@ -161,27 +197,39 @@
     <div class="container post">
         <h2> From Trail Renderer to Decal Projector</h2>
         <h3> May 13th - 2024</h3>
-        
+
         <p>
-            Though the trail renderer did what we wanted it to do, there was some noticable issues with it. The trail renderer 
-            lacked customizability and the trackmarks either clipped through the ground or were visibly on top of the ground. 
-            We decided to look for a better solution and found that Unity's Decal Projector was a better fit for our problem.
+            Though the trail renderer did what we wanted it to do, there was some noticable issues with it. The trail
+            renderer
+            lacked customizability and the trackmarks either clipped through the ground or were visibly on top of the
+            ground.
+            We decided to look for a better solution and found that Unity's Decal Projector was a better fit for our
+            problem.
         </p>
-        <p>    
-            However, to use the decal projector, we needed to change the render pipeline as the default render pipeline (that 
-            was used in lab 3) did not support the decal projector. Unity offers three different render pipelines, the 
-            built-in (that doesnt support decals), the Universal Render Pipeline (URP) and the High Definition Render Pipeline 
-            (HDRP). We decided to use the URP as it was the most lightweight while still providing the features we needed. We 
-            followed 
-            <a href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/InstallURPIntoAProject.html">this tutorial</a> 
+        <p>
+            However, to use the decal projector, we needed to change the render pipeline as the default render pipeline
+            (that
+            was used in lab 3) did not support the decal projector. Unity offers three different render pipelines, the
+            built-in (that doesnt support decals), the Universal Render Pipeline (URP) and the High Definition Render
+            Pipeline
+            (HDRP). We decided to use the URP as it was the most lightweight while still providing the features we
+            needed. We
+            followed
+            <a
+                href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/InstallURPIntoAProject.html">this
+                tutorial</a>
             to change the render pipeline and set up the decal projector.
         </p>
 
         <img src="resources/decalPrefab.png" width="60%" alt="the URP decal projector">
         <p>
-            The decal projector works by projecting a decal shader onto a surface. Unlike the trail renderer, the decals wrap 
-            around the surface they are projected upon and gives a more realistic look to the trackmarks. After some experiementing
-            with the different options, we found <a href="https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/g-urp-decals-194864">this free asset</a>
+            The decal projector works by projecting a decal shader onto a surface. Unlike the trail renderer, the decals
+            wrap
+            around the surface they are projected upon and gives a more realistic look to the trackmarks. After some
+            experiementing
+            with the different options, we found <a
+                href="https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/g-urp-decals-194864">this
+                free asset</a>
             that offered a normal map shader that gave the trackmarks a more realistic look.
         </p>
 
@@ -190,12 +238,17 @@
     <div class="container post">
         <h2> Trackmarks / Skidmarks</h2>
         <h3> May 10th - 2024</h3>
-        
+
         <p>
-            To match the desert environment, we wanted to add trackmarks in the sand where the tank had driven to add a sense of realism to the scene. 
-            We started by checking different technique to achieving this and one straightforward technique was to use Unity's <a href="https://docs.unity3d.com/Manual/class-TrailRenderer.html">Trail Renderer</a>. 
-            We took to YouTube to find references and found <a href="https://www.youtube.com/watch?v=0LOcxZhkVwc&t=163s">Unity Tutorial - Skid Marks And Skid Sound(Trail Renderer)</a> 
-            by pablos lab. Drawing inspiration from the clip, and by adding in trail renderer objects, we could set our preferred color on the trail and voila! something that looks like trackmarks!
+            To match the desert environment, we wanted to add trackmarks in the sand where the tank had driven to add a
+            sense of realism to the scene.
+            We started by checking different technique to achieving this and one straightforward technique was to use
+            Unity's <a href="https://docs.unity3d.com/Manual/class-TrailRenderer.html">Trail Renderer</a>.
+            We took to YouTube to find references and found <a
+                href="https://www.youtube.com/watch?v=0LOcxZhkVwc&t=163s">Unity Tutorial - Skid Marks And Skid
+                Sound(Trail Renderer)</a>
+            by pablos lab. Drawing inspiration from the clip, and by adding in trail renderer objects, we could set our
+            preferred color on the trail and voila! something that looks like trackmarks!
         </p>
 
         <img src="resources/trailDemo.png" width="60%" alt="trail renderer">
