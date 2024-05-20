@@ -133,6 +133,21 @@
     </div>
 
     <div class="container post">
+        <h2> Following the tank </h2>
+        <h3> May 15th - 2024</h3>
+        <p>
+            After creating an projector and modfiying the decal to the desired apperance, the last step was to implement the creaton of the decal during tank movement.
+            Some experiementing was done with the positioning and the number of decals spawned. At first, we wanted the whole track bands to generate a large decal but this 
+            lacked a realistic look when turning.
+        </p>
+        <p>
+            We created a small decal spawned at the fixed update frequence, as this provided the best result. Lastly we had some issues getting the correct rotation of the decal 
+            as it was not following the the tank as it turned. We eventually went with the SetLookRotation method for the quaternion of the decal and this fixed our issue.
+        </p>
+        <img src="resources/notFollowing.png" width="60%" alt="the decal not correctly following the tank">
+    </div>
+
+    <div class="container post">
         <h2> Smoke from main gun & Recoil </h2>
         <h3> May 14th - 2024</h3>
         <p>
